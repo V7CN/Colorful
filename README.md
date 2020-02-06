@@ -210,6 +210,15 @@ Mathematica默认会把结果打印出来。如果你定义或导入一个庞大
 
 即按CIE 1931 2-deg标准将光谱变换成XYZ。
 
+### XYZ <-> xyY
+两个函数：
+* XYZ2xyY
+* xyY2XYZ
+
+注意：该函数无法处理Y=0的数据。举例：
+
+    XYZ2xyY[{1, 1, 1}]
+
 ### XYZ -> L\*a\*b\*
 为方便书写，在Colorful中，用LAB表示，常用函数是
 * XYZ2LAB（"refWP"默认"D65"）
@@ -248,17 +257,17 @@ LCH的数据源有两种，LAB或LUV，但变换算法是相同的。所以你�
 
 两函数都有一个选项，用来设定H是否用角度单位输出。由于Mathematica三角函数都以弧度为单位，所以默认为False，即用弧度表示H。举例：
 
-    LAB2LCH[{100,1,1}]
+    LAB2LCH[{100,1,1},"deg"->False]
 
 不出意外，结果是{100,$\sqrt 2$,$\frac{\pi}{4}$}。如果想输出数值结果，在语句最后加上"//N"即可。
 
-（图
+<center><img src="https://github.com/V7CN/Colorful/blob/master/img/README04.png?raw=true" width="70%" h></center>
 
 因为LAB、LUV已经设置参考白点，所以此转换没有参考白点的选项。但你要明白，LCH数据也是暗含参考白点的，为了不引起混乱，暂不设反转换的函数。
 
 ### LAB -> DE00
 
-DE00是计算色偏相对较新的标准。它也暗含参考白点。所以计算DE00的唯一方式是，先设置参考白点转到LAB，再计算DE00。
+DE00是计算色偏相对较新的标准。它也暗含参考白点。所以计算DE00的唯一方式是，先转到特定白点的LAB，再计算DE00。
 
 举例：
 
@@ -266,9 +275,47 @@ DE00是计算色偏相对较新的标准。它也暗含参考白点。所以计�
 
 ## 绘图
 ### 光谱绘图
+    DrawSpectrum[LSD55]
+<center><img src="https://github.com/V7CN/Colorful/blob/master/img/README05.png?raw=true" width="90%" h></center>
+
 ### 相机谱特性绘图
+    DrawCMF[CMFXYZ]
+<center><img src="https://github.com/V7CN/Colorful/blob/master/img/README06.png?raw=true" width="90%" h></center>
+
 ### CIE 1931 xy色度图
+**绘图函数输入的是“像素集”，而不是“像素”。**
+该绘图函数有两个：
+* Draw1931XYZ，输入XYZ像素集，打印在xy色度图上；
+* Draw1931xyY，输入xyY像素集，打印在xy色度图上。
+
+两个函数都有四个选项：
+* "PointSize"：是数据点大小，默认0.01。
+* "Ymax"：是决定可打印数据点的Y的最大值。Y超过该值，便不会打印出来。默认为1。
+* "Ygamma"：该函数的数据点会以真实色彩显现出来，如果数据点过于暗，可以减小该值。相当于对显示亮度作gamma校正。
+* "PlotRange"：打印的横纵坐标范围，默认为{0, 0.9}一般不会改变。
+
+举例，绘制白点E：
+    Draw1931XYZ[{{1, 1, 1}}, "PointSize" -> 0.02]
+
+<center><img src="https://github.com/V7CN/Colorful/blob/master/img/README07.png?raw=true" width="90%" h></center>
+
+该绘图函数绘制的是三维图形。垂直于屏幕的是表示亮度的Y轴，你可以用鼠标拖动旋转它。
+
 ### CIE 1976 uv色度图
+该绘图函数有一个：
+* Draw1976XYZ，输入XYZ像素集，打印在uv色度图上；
+
+函数有四个选项：
+* "PointSize"：是数据点大小，默认0.01。
+* "Lmax"：是决定可打印数据点的L的最大值。L超过该值，便不会打印出来。默认为100。
+* "Lgamma"：该函数的数据点会以真实色彩显现出来，如果数据点过于暗，可以减小该值。相当于对显示明度作gamma校正。
+* "refWP"：参考白点，它不会改变数据点的位置，但会细微改变点的颜色。默认为"E"
+
+举例，绘制白点E：
+    Draw1976XYZ[{{1, 1, 1}}, "PointSize" -> 0.02]
+
+<center><img src="https://github.com/V7CN/Colorful/blob/master/img/README08.png?raw=true" width="90%" h></center>
+
 ## 六、LUT生成器
 ### 1DLUT
 ### 3DLUT
