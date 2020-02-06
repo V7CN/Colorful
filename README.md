@@ -16,11 +16,11 @@
       - [色彩空间转换](#2.色彩空间转换)
       - [例：一个完整的色彩管理](#3.例：一个完整的色彩管理)
   - [色彩模型变换](#四、色彩模型变换)
-    - [光谱 $\longrightarrow$ XYZ](#1.光谱-$\longrightarrow$-XYZ)
-    - [XYZ $\longleftrightarrow$ L\*a\*b\*](#2.2.XYZ-$\longleftrightarrow$-L\*a\*b\*)
-    - [XYZv $\longleftrightarrow$ L\*u'v' $\longleftrightarrow$ L\*u\*v\*](#3.XYZ-$\longleftrightarrow$-L\*u'v'-$\longleftrightarrow$-L\*u\*v\*)
-    - [L\*a\*b\*、L\*u\*v\* $\longleftrightarrow$ LCH](#4.L\*a\*b\*、L\*u\*v\*-$\longleftrightarrow$-LCH)
-    - [LAB $\longrightarrow$ DE00](#5.LAB-$\longrightarrow$-DE00)
+    - [光谱 -> XYZ](#1.光谱-->-XYZ)
+    - [XYZ <-> L\*a\*b\*](#2.2.XYZ-<->-L\*a\*b\*)
+    - [XYZ <-> L\*u'v' <-> L\*u\*v\*](#3.XYZ-<->-L\*u'v'-<->-L\*u\*v\*)
+    - [L\*a\*b\*、L\*u\*v\* -> LCH](#4.L\*a\*b\*、L\*u\*v\*-->-LCH)
+    - [LAB -> DE00](#5.LAB-->-DE00)
   - [绘图](#五、绘图)
     - [1.光谱绘图](#1.光谱绘图)
     - [色彩模型变换](#2.相机谱特性绘图)
@@ -201,7 +201,7 @@ Mathematica默认会把结果打印出来。如果你定义或导入一个庞大
 
 ## 四、色彩模型变换
 色彩管理本质上仍是XYZ空间内的变换，是线性变换（并包含Gamma运算）。而色彩模型间的变换是XYZ、LAB、LUV、LCH坐标间的变换，是非线性变换。而从光谱计算颜色也是一种“模型变换”，所以也纳入此列。
-### 1.光谱 $\longrightarrow$ XYZ
+### 1.光谱 -> XYZ
 从光谱到色彩，有两个路径。一是用标准人眼色匹配函数CMFXYZ去乘，而标准人眼色匹配函数有很多组，常用CIE 1931 2-deg Standard Observer；二是用相机或胶片的光谱敏感度函数去乘，并用相对正确的色彩矩阵做色彩管理，[这篇文章](https://zhuanlan.zhihu.com/p/77471401)使用过第二种路径，你可以亲自尝试将相机结果与人眼结果做对比。
 
 这里用人眼色匹配函数举例。前文提到过，LSD65是光谱分布，只需用代码：
@@ -210,7 +210,7 @@ Mathematica默认会把结果打印出来。如果你定义或导入一个庞大
 
 即按CIE 1931 2-deg标准将光谱变换成XYZ。
 
-### 2.XYZ $\longleftrightarrow$ L\*a\*b\*
+### 2.XYZ -> L\*a\*b\*
 为方便书写，在Colorful中，用LAB表示，常用函数是
 * XYZ2LAB
 * LAB2XYZ
@@ -224,10 +224,10 @@ Mathematica默认会把结果打印出来。如果你定义或导入一个庞大
 
 这是一个套娃测试，从XYZ转到LAB再转回来，结果与输入相同。
 
-### 3.XYZ $\longleftrightarrow$ L\*u'v' $\longleftrightarrow$ L\*u\*v\*
+### 3.XYZ <-> L\*u'v' <-> L\*u\*v\*
 
-### 4.L\*a\*b\*、L\*u\*v\* $\longleftrightarrow$ LCH
-### 5.LAB $\longrightarrow$ DE00
+### 4.L\*a\*b\*、L\*u\*v\* -> LCH
+### 5.LAB -> DE00
 
 ## 五、绘图
 ### 1.光谱绘图
