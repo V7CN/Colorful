@@ -23,7 +23,7 @@ Colorful并不复杂，它更像是一个简单的函数集合。它能做 XYZ <
 
 这一句的意思是，将像素{X=1，Y=1，Z=1}打印在CIE 1931色度图上：
 
-<center><img src="https://pic4.zhimg.com/80/v2-ec3544dd7214026d331b863c8a116f3b_hd.jpg" width="50%" h></center>
+<center><img src="https://github.com/V7CN/Colorful/blob/master/img/README01.png?raw=true" width="50%" h></center>
 
 
 ## 概览
@@ -83,11 +83,11 @@ Colorful主要用列表存储数据。其中有5类数据，具体计算的数�
 
 输入“LSD65”并运行，可以输出D65的光谱分布。
 
-<center><img src="https://pic4.zhimg.com/80/v2-23b6c92247f5d8f8233935ecf6f31967_hd.jpg" width="90%" h></center>
+<center><img src="https://github.com/V7CN/Colorful/blob/master/img/README02.png?raw=true" width="90%" h></center>
 
 Mathematica默认会把结果打印出来。如果你定义或导入一个庞大的列表，在表达式最后加一个分号，就能阻止输出结果，看起来清爽：
 
-<center><img src="https://pic2.zhimg.com/80/v2-a14d96b9807ce6226185eb3d8a8f78a1_hd.jpg" width="40%" h></center>
+<center><img src="https://github.com/V7CN/Colorful/blob/master/img/README03.png?raw=true" width="40%" h></center>
 
 #### 4.色匹配函数、相机光谱敏感度函数：3x69列表
 
