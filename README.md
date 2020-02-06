@@ -384,4 +384,6 @@ LUT的支持单独写在LUT.nb文件中了。你需要打开LUT.nb并点击计�
 
 可以发现与图片刚打开时观感相同，验证成功。
 
-自此，Colorful的功能简介结束了。
+
+自此，Colorful的功能简介结束了。祭出下图：
+<center><img src="https://github.com/V7CN/Colorful/blob/master/img/README11.png?raw=true" width="90%" h></center>
