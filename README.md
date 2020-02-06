@@ -317,5 +317,71 @@ DE00是计算色偏相对较新的标准。它也暗含参考白点。所以计�
 <center><img src="https://github.com/V7CN/Colorful/blob/master/img/README08.png?raw=true" width="90%" h></center>
 
 ## 六、LUT生成器
+LUT的支持单独写在LUT.nb文件中了。你需要打开LUT.nb并点击计算-计算笔记本，将其载入内核中。
+该文件可独立使用。在其中，写有简单的教程和Demo。
 ### 1DLUT
+#### 1DLUT特性
+* 1DLUT仅调整每个通道的影调映射，不能作通道间的变换，如1DLUT不能作色彩空间转换。
+* 正由上述原因，1DLUT可以用很小的文件实现相当高的精度，用以Gamma的变换。1DLUT的精度由LUT的大小（size）决定，常设为2的整数次方。如在16bit工作流中，设置size=65536，可以实现每个通道65536个点位，相当于每个值都被精确映射到所需值。
+* PS中可以使用1DLUT。
+
+#### LutCreator1D函数的使用方法
+
+* 首先明确工作流的bit数、希望的精度。比如设定精度为16bit，LUT的大小为65536。
+* 1DLut中的值最小为0，最大为1，所以要分别定义r、g、b各通道的变换函数，定义域、值域都是0到1。
+
+举例：设定将gamma2.2转换成gamma1.8的函数----"gamma"
+
+    gamma[v_] := (v^(2.2))^(1/1.8)
+
+* 调用LutCreator1D函数。
+  * 第一个参数是文件名，文件后缀设置为.cube。文件将保存到工作路径/Workspace下；
+  * 第二至四个参数分别对应r、g、b通道的转换函数，这里用同样的函数"gamma"；
+  * 第五个参数是LUT的大小。
+
+举例：
+
+    LutCreator1D["gamma2.2-1.8.cube", gamma, gamma, gamma, 65536]
+
+可以在工作路径/Workspace下找到该lut，在PS中调用该LUT，可以发现图像的gamma变化（图像变暗）:
+
+<center><img src="https://github.com/V7CN/Colorful/blob/master/img/README09.png?raw=true" width="90%" h></center>
+验证成功。
+
 ### 3DLUT
+#### 3DLUT特性
+
+* 3DLUT在精度上往往不及1DLUT，但是其功能更多：可以进行通道间的变换，这意味着可以囊括相当复杂的色彩变换，如色彩空间的转换。
+* 3DLUT非常庞大，而且文件大小相对于点位提高指数上升：典型的64个点位的LUT将占据7.8M的大小，256点位的LUT将占据百余兆的空间。所以，影调变换尽量用1DLUT，遇到复杂的色彩变换时再使用3DLUT，配合使用。
+* 正是因为精度有限，所以必须注重3DLUT的使用技巧，如使用gamma提升精度等。
+
+#### LutCreator3D函数的使用方法
+* 首先明确希望的精度。快速生成往往设size=16；普通使用可以设size=64；高精度可设size=256，但需要花很长时间生成。
+* 定义对"像素"的变换函数。这里就可以使用Colorful框架中的大量函数了。但是必须对流程中的每一步有正确的理解！
+
+举例：将sRGB转换为AdobeRGB（这里需要Colorful框架支持），先将数据变成线性的，并调用基色、白点变换，最后应用gamma校正。
+
+    sRGBtoAdobeRGB[{r_, g_, b_}] :=
+    CM[{r, g, b}^2.2,
+    "iPri" -> "sRGB",
+    "oPri" -> "AdobeRGB",
+    "iWP" -> "D65",
+    "oWP" -> "D65",
+    "Clip" -> True]^(1/2.2)
+
+* 调用LutCreator3D函数。
+  * 第一个参数是文件名，文件后缀设置为.cube。文件将保存到工作路径/Workspace下；
+  * 第二个参数是对像素进行操作的函数。这里用示例函数"sRGBtoAdobeRGB"；
+  * 第三个参数是LUT的大小，这里使用16。
+
+举例：
+
+    LutCreator3D["sRGB to AdobeRGB.cube", sRGBtoAdobeRGB, 16]
+
+这时可以从PS中打开一个sRGB的文件，调用该LUT，并指定色彩空间为AdobeRGB：
+
+<center><img src="https://github.com/V7CN/Colorful/blob/master/img/README10.png?raw=true" width="90%" h></center>
+
+可以发现与图片刚打开时观感相同，验证成功。
+
+自此，Colorful的功能简介结束了。
